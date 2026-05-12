@@ -28,3 +28,38 @@
   margin-right: 12px;
   }
 }
+
+/* Style du bouton Effacer */
+.btn-effacer {
+  padding: 8px 16px;
+  background-color: #e74c3c; /* Un rouge doux */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+  height: 40px; /* Aligné sur la hauteur de l'input */
+}
+
+.btn-effacer:hover {
+  background-color: #c0392b; /* Rouge plus foncé au survol */
+}
+
+/* Style du message quand la recherche est vide */
+.message-vide {
+  text-align: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+  color: #7f8c8d;
+  margin-top: 20px;
+  font-style: italic;
+}
+
+.recherche-input { 
+    flex: 1; /* C'est cette ligne qui va "pousser" le bouton et agrandir la barre */
+    padding: 12px;
+    font-size: 16px;
+}

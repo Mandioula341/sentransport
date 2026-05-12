@@ -96,9 +96,19 @@ const StatReseau = ({ lignes }) => {
   );
 };
 
+
 function App() {
   const [recherche, setRecherche] = useState("");
   const [ligneSelectionnee, setLigneSelectionnee] = useState(null);
+
+  // --- Exercice 3 : État pour le compteur ---
+  const [nbRecherches, setNbRecherches] = useState(0);
+
+  // Fonction pour gérer la saisie et incrémenter le compteur
+  const handleChangementRecherche = (valeur) => {
+    setRecherche(valeur);
+    setNbRecherches(nbRecherches + 1);
+  };
 
   const lignes = [
     { id: 1, numero: "1", depart: "Parcelles Assainies",arrivee: "Plateau", arrets: 14,listeArrets: ["Parcelles U14", "Parcelles U10","Camberene", "Patte d'Oie", "Grand Dakar","Colobane", "Ponty", "Plateau"] },
@@ -130,29 +140,48 @@ function App() {
       <Header />
       
       <main className="contenu">
-        <Recherche 
-          valeur={recherche} 
-          onChange={setRecherche} 
-        />
 
+        <StatReseau lignes={lignes}/>
+
+        {/* Exercice 3 : Affichage du compteur*/} 
+        <p>Vous avez effectué {nbRecherches} recherche(s)</p>
+
+        <div style={{ display: 'flex',  gap: '10px', width: '100%',  maxWidth: '600px' }}>
+          <Recherche className="recherche-input"
+            valeur={recherche} 
+            onChange={handleChangementRecherche} 
+          />
+
+          {/*Exercice 1 : Bouton Efface */}
+          <button onClick={() => setRecherche("")} className="btn-effacer">
+            Effacer
+          </button>
+        </div>
+
+
+        {/* --- Exercice 2 : Message si aucun résultat --- */}
+        {lignesFiltrees.length === 0 ? (
+          <p className="message-vide">Aucune ligne trouvée</p>
+        ) : (
+          <>
         <p className="resultat-recherche">
           {lignesFiltrees.length} ligne{lignesFiltrees.length > 1 ? 's' : ''} trouvée{lignesFiltrees.length > 1 ? 's' : ''}
         </p>
 
         {/* Liste des lignes */}
-        {lignesFiltrees.map(ligne => (
-          <LigneBus
-            key={ligne.id}
-            numero={ligne.numero}
-            depart={ligne.depart}
-            arrivee={ligne.arrivee}
-            arrets={ligne.arrets}
-            estSelectionnee={ligneSelectionnee?.id === ligne.id}
-            onClick={() => handleClickLigne(ligne)}
-          />
-        ))}
-
-        {/* Affichage du détail si une ligne est sélectionnée */}
+            {lignesFiltrees.map(ligne => (
+              <LigneBus
+                key={ligne.id}
+                numero={ligne.numero}
+                depart={ligne.depart}
+                arrivee={ligne.arrivee}
+                arrets={ligne.arrets}
+                estSelectionnee={ligneSelectionnee?.id === ligne.id}
+                onClick={() => handleClickLigne(ligne)}
+              />
+            ))}
+          </>
+        )}
         {ligneSelectionnee && <DetailLigne ligne={ligneSelectionnee} />}
       </main>
 

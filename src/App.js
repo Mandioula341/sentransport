@@ -6,6 +6,8 @@ import LigneBus from './LignesBus';
 import DetailLigne from './DetailLigne';
 import Footer from './Footer';
 import Carte from './Carte';
+import Meteo from './Meteo';
+import SignalerIncident from './SignalerIncident';
 
 // Définition du composant StatReseau
 //const StatReseau = ({ lignes }) => {
@@ -238,6 +240,7 @@ useEffect(() => {
       <Header />
       
       <main className="contenu">
+        <Meteo /> 
 
         <StatReseau lignes={lignes}/>
 
@@ -287,8 +290,8 @@ useEffect(() => {
         {ligneSelectionnee && <DetailLigne ligne={ligneSelectionnee} />}
 
         <Carte />
+        <SignalerIncident />
       </main>
-
       <Footer />
     </div>
   );

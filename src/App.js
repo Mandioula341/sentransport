@@ -5,6 +5,7 @@ import Recherche from './Recherche';
 import LigneBus from './LignesBus';
 import DetailLigne from './DetailLigne';
 import Footer from './Footer';
+import Carte from './Carte';
 
 // Définition du composant StatReseau
 //const StatReseau = ({ lignes }) => {
@@ -122,23 +123,49 @@ function App() {
   //   { id: 6, numero: "12", depart: "Yoff",arrivee: "Sandaga", arrets: 11,listeArrets: ["Yoff Village", "Aeroport LSS","Parcelles U17", "Grand Yoff", "HLM", "Sandaga"] },
   // ];
 
-   useEffect(() => {
-    fetch("http://localhost:5000/lignes")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Erreur serveur : " + response.status);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setLignes(data);
-        setChargement(false);
-      })
-      .catch((error) => {
-        setErreur(error.message);
-        setChargement(false);
-      });
-  }, []);
+  //  useEffect(() => {
+  //   fetch("http://localhost:5000/lignes")
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         throw new Error("Erreur serveur : " + response.status);
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       setLignes(data);
+  //       setChargement(false);
+  //     })
+  //     .catch((error) => {
+  //       setErreur(error.message);
+  //       setChargement(false);
+  //     });
+  // }, []);
+
+  /*Exercice1 lab5: Extraire le fetch dans une fonction séparée*/
+function chargerLignes() {
+  setChargement(true);
+  setErreur(null);
+  fetch("http://localhost:5000/lignes")
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Erreur serveur : " + response.status);
+      }
+      return response.json();
+    })
+    .then(data => {
+      setLignes(data);
+      setChargement(false);
+    })
+    .catch(error => {
+      setErreur(error.message);
+      setChargement(false);
+    });
+}
+
+// useEffect appelle la même fonction
+useEffect(() => {
+  chargerLignes();
+}, []);
 
   // Logique de filtrage
   const lignesFiltrees = lignes.filter(l =>
@@ -147,13 +174,35 @@ function App() {
     l.numero.includes(recherche)
   );
 
-  // Gestion du clic (Toggle)
+  // Gestion du clic (Toggle) Lab4
+  // function handleClickLigne(ligne) {
+  //   if (ligneSelectionnee && ligneSelectionnee.id === ligne.id) {
+  //     setLigneSelectionnee(null); // Désélectionne si déjà active
+  //   } else {
+  //     setLigneSelectionnee(ligne); // Sélectionne la ligne
+  //   }
+  // }
+
+  /*Exercice 3 lab5 : charger les détails via GET /lignes/<id>*/
   function handleClickLigne(ligne) {
     if (ligneSelectionnee && ligneSelectionnee.id === ligne.id) {
-      setLigneSelectionnee(null); // Désélectionne si déjà active
-    } else {
-      setLigneSelectionnee(ligne); // Sélectionne la ligne
+      setLigneSelectionnee(null);
+      return;
     }
+
+    fetch(`http://localhost:5000/lignes/${ligne.id}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Ligne introuvable");
+        }
+        return response.json();
+      })
+      .then(data => {
+        setLigneSelectionnee(data);
+      })
+      .catch(error => {
+        console.error("Erreur chargement détails :", error.message);
+      });
   }
 
   // Ecran de chargement
@@ -192,23 +241,27 @@ function App() {
 
         <StatReseau lignes={lignes}/>
 
-        {/* Exercice 3 : Affichage du compteur*/} 
+        {/* Exercice 3 lab4: Affichage du compteur*/} 
         <p>Vous avez effectué {nbRecherches} recherche(s)</p>
 
-        <div style={{ display: 'flex',  gap: '10px', width: '100%',  maxWidth: '600px' }}>
+        <div style={{ display: 'flex', gap: '10px', width: '100%', maxWidth: '600px', alignItems: 'center' }}>
           <Recherche className="recherche-input"
             valeur={recherche} 
             onChange={handleChangementRecherche} 
           />
+           {/*Exercice 1 lab5: Bouton Recharger */}
+          <button onClick={chargerLignes} className="btn-recharger">
+            🔄 Recharger
+          </button>
 
-          {/*Exercice 1 : Bouton Efface */}
+          {/*Exercice 1 lab4: Bouton Efface */}
           <button onClick={() => setRecherche("")} className="btn-effacer">
             Effacer
           </button>
         </div>
 
 
-        {/* --- Exercice 2 : Message si aucun résultat --- */}
+        {/* --- Exercice 2 lab4: Message si aucun résultat --- */}
         {lignesFiltrees.length === 0 ? (
           <p className="message-vide">Aucune ligne trouvée</p>
         ) : (
@@ -232,6 +285,8 @@ function App() {
           </>
         )}
         {ligneSelectionnee && <DetailLigne ligne={ligneSelectionnee} />}
+
+        <Carte />
       </main>
 
       <Footer />

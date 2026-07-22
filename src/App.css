@@ -86,3 +86,20 @@
   font-family: monospace;
   font-size: 0.9rem;
 }
+
+.btn-recharger {
+  padding: 8px 16px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+  height: 40px;
+  white-space: nowrap;
+}
+
+.btn-recharger:hover {
+  background-color: #3498db;
+}

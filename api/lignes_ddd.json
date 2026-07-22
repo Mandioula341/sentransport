@@ -49,5 +49,21 @@
         "arrets": 11,
         "listeArrets": ["Yoff Village", "Aeroport LSS",
         "Parcelles U17", "Grand Yoff", "HLM", "Sandaga"]
+    },
+
+    {
+        "id": 7,
+        "numero": "18",
+        "depart": "Guediawaye","arrivee": "Plateau",
+        "arrets": 10,
+        "listeArrets": ["Guediawaye", "Pikine", "Thiaroye" ,"Colobane", "Fass" , "Plateau"]
+    },
+
+    {
+         "id": 8,
+        "numero": "2",
+        "depart": "Rufisque","arrivee": "Dakar",
+        "arrets": 12,
+        "listeArrets": ["Rufisque", "Bargny", "Thiaroye", "Keur Massar", "Pikine" ,"Dakar"]
     }
 ]
